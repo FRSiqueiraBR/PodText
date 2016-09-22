@@ -34,7 +34,6 @@ public class EditTextActivity extends AppCompatActivity {
                 speakActivity.putExtra("text", text);
 
                 startActivity(speakActivity);
-
             }
         });
     }
