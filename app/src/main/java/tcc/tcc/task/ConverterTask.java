@@ -1,94 +1,118 @@
 package tcc.tcc.task;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.view.Gravity;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.parser.PdfTextExtractor;
+import android.os.Environment;
+import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class ConverterTask extends AsyncTask<String, Float, String> {
-    private ProgressBar progressBar;
-    private TextView textView;
+import tcc.tcc.activity.EditTextActivity;
+import tcc.tcc.model.ConverterTaskModel;
+import tcc.tcc.util.ExtractText;
 
-    private String fileName;
-    private Float page = 0f;
-    private Float numberOfPages = 0f;
-    private Float progress = 0f;
+public class ConverterTask extends AsyncTask<String, Float, ConverterTaskModel> {
+    private Activity activity;
+    private ExtractText extractText = new ExtractText();
+    private ConverterTaskModel converterTaskModel = new ConverterTaskModel();
+
+    public ConverterTask(Activity activity){
+        this.activity = activity;
+    }
 
 
-    public ConverterTask(ProgressBar progressBar, TextView textView, String fileName) {
-        this.progressBar = progressBar;
-        this.textView = textView;
-        this.fileName = fileName;
+    @Override
+    protected ConverterTaskModel doInBackground(String... fileName) {
+        final String filePath;
+        File path;
+        String text;
+
+        text = readFile(fileName);
+        path = createDirectory();
+        filePath = createFile(path, text, fileName[0]);
+
+        converterTaskModel.setFilePath(filePath);
+        return converterTaskModel;
     }
 
     @Override
-    protected void onPreExecute() {
-        textView.setText("0%");
-        super.onPreExecute();
+    protected void onPostExecute(ConverterTaskModel converterTaskModel) {
+        Intent editTextActivity = new Intent(activity, EditTextActivity.class);
+        editTextActivity.putExtra("file_path", converterTaskModel.getFilePath());
+        editTextActivity.putExtra("file_name", converterTaskModel.getFileName());
+        editTextActivity.putExtra("number_pages", converterTaskModel.getNumberOfPages());
+        editTextActivity.putExtra("extension", converterTaskModel.getExt());
+        editTextActivity.putExtra("size", converterTaskModel.getSize());
+
+        activity.startActivity(editTextActivity);
     }
 
-    @Override
-    protected String doInBackground(String... params) {
+    public String readFile(String[] name) {
+        String fileName = name[0];
+
         if (fileName != null && !fileName.isEmpty()) {
             File file = new File(android.os.Environment.getExternalStorageDirectory(), fileName);
 
             if (isPDF(file)) {
                 try {
-                    parsePdf(file);
+                    String text = extractText.parsePdf(file);
+
+                    this.converterTaskModel.setFileName(extractText.getFileName());
+                    this.converterTaskModel.setNumberOfPages(String.valueOf(extractText.getNumberOfPages()));
+                    this.converterTaskModel.setExt(getExt(file));
+                    this.converterTaskModel.setSize(String.valueOf(extractText.getSize()));
+
+                    return text;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else {
+                return extractText.extractTXT(file);
             }
         }
-
-        return null;
+        return "Não foi possível ler o texto";
     }
 
-    @Override
-    protected void onProgressUpdate(Float... values) {
-        Float value = values[0];
-        Float result = (value / numberOfPages) * 100;
-        if (result.intValue() > progress.intValue()){
-            progress=result;
-            progressBar.incrementProgressBy(1);
+    private boolean isPDF(File file) {
+        return getExt(file).equals(".pdf");
+    }
+
+    private String getExt(File file) {
+        if (file.getName() != null && !file.getName().isEmpty()) {
+            return file.getName().substring(file.getName().length() - 4, file.getName().length());
+        } else {
+            return new String();
         }
-        textView.setText("Convertendo páginas: (" + page.intValue() + "/" + numberOfPages.intValue() + ")...");
-        super.onProgressUpdate(values);
     }
 
-    @Override
-    protected void onPostExecute(String text) {
-        progressBar.setVisibility(ProgressBar.INVISIBLE);
-        textView.setText("Tarefa concluída");
-        textView.setGravity(Gravity.CENTER_HORIZONTAL);
-    }
-
-    public String parsePdf(File file) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        PdfReader reader = new PdfReader(file.getPath());
-        numberOfPages = (float) reader.getNumberOfPages();
-
-        for (int i = 1; i <= numberOfPages; i++) {
-            page = (float) i;
-            publishProgress((float)i);
-
-            sb.append(PdfTextExtractor.getTextFromPage(reader, i));
-            Log.d("Pagina:", String.valueOf(i));
+    public File createDirectory() {
+        File path = Environment.getExternalStorageDirectory().getAbsoluteFile();
+        File dir = new File(path, "TCC_NAME" + File.separator + "MyAudioBooks");//TODO
+        if (!dir.exists()) {
+            dir.mkdirs();
         }
-
-        reader.close();
-        return sb.toString();
+        return dir;
     }
 
-    public boolean isPDF(File file) {
-        return file.getName().substring(file.getName().length() - 4, file.getName().length()).equals(".pdf");
-    }
+    public String createFile(File path, String text, String fileName) {
+        try {
+            File fileExt = new File(path, fileName + ".txt");
+            //Cria o arquivo
+            fileExt.getParentFile().mkdirs();
+            //Abre o arquivo
+            FileOutputStream fosExt = new FileOutputStream(fileExt);
+            //Escreve no arquivo
+            fosExt.write(text.getBytes());
+            //Obrigatoriamente você precisa fechar
+            fosExt.close();
 
+            return fileExt.getPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 }

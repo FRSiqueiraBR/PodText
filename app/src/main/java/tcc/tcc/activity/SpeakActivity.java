@@ -4,12 +4,29 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.io.SequenceInputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -89,13 +106,15 @@ public class SpeakActivity extends AppCompatActivity {
     private void ttsGreater21(String text) {
         String utteranceId = this.hashCode() + "";
         String paragraph[] = parseData(text);
+        File file = new File("/storage/emulated/0/test.wav");
 
         for (int i = 0; i < paragraph.length; i++) {
-            ts.speak(paragraph[i], TextToSpeech.QUEUE_FLUSH, null, utteranceId);
-
+            //ts.speak(paragraph[i], TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+            ts.synthesizeToFile(paragraph[i], null, file, utteranceId);
             while(ts.isSpeaking()){
                 //TODO buscar um jeito melhor de se fazer
             }
+            break;
         }
     }
 
@@ -108,6 +127,22 @@ public class SpeakActivity extends AppCompatActivity {
         HashMap<String, String> map = new HashMap<>();
         map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId");
         ts.speak(text, TextToSpeech.QUEUE_FLUSH, map);
+    }
+
+    public String loadFile(String path){
+        try {
+            String line;
+            StringBuilder sb = new StringBuilder();
+            BufferedReader br = new BufferedReader(new FileReader(path));
+            while ((line = br.readLine()) != null){
+                line = line.replace(".", "\n");
+                sb.append(line);
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 }

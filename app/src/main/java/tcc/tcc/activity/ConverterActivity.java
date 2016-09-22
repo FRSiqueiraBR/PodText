@@ -3,6 +3,7 @@ package tcc.tcc.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,15 +12,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import tcc.tcc.R;
 import tcc.tcc.model.FileItem;
+import tcc.tcc.task.ConverterTask;
 import tcc.tcc.util.ExtractText;
 
 public class ConverterActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+
+    private String fileName;
+    private String size;
+    private String numberOfPages;
+    private String ext;
+    private String[] text;
+
     private ArrayList<FileItem> listFileItems = new ArrayList<>();
     private ExtractText extractText = new ExtractText();
 
@@ -69,25 +80,35 @@ public class ConverterActivity extends AppCompatActivity implements AdapterView.
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        final String[] text = {new String()};
+        try {
+            final FileItem fileItemSelected = (FileItem) listViewFiles.getItemAtPosition(i);
 
-        final FileItem fileItemSelected = (FileItem) listViewFiles.getItemAtPosition(i);
+            ProgressDialog progress = new ProgressDialog(ConverterActivity.this);
+            progress.setMessage("Convertendo Arquivo para texto.\nIsso pode demorar um pouco, por favor aguarde...");
+            progress.show();
 
-        ProgressDialog progress = new ProgressDialog(this);
-        progress.setMessage("Convertendo PDF para texto.\nIsso pode demorar um pouco, por favor aguarde...");
-        progress.show();
-
-        final Thread thread = new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                text[0] = readFile(fileItemSelected.getName());
-                chanceActivity(text[0]);//TODO
-            }
-        };
-        thread.start();
+            ConverterTask asyncTask = new ConverterTask(this);
+            asyncTask.execute(fileItemSelected.getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
+
+    public void thread() {
+        //final Thread thread = new Thread() {
+        //    @Override
+        //  public void run() {
+        //      super.run();
+        //      text[0] = readFile(fileItemSelected.getName());
+        ////      File path = createDirectory();
+        //    final String filePath = createFile(path);
+        //      chanceActivity(filePath);//TODO
+        //  }
+        //};
+        //thread.start();
+    }
+
 
     /**
      * FAZ A LEITURA DO ARQUIVO,
@@ -99,11 +120,17 @@ public class ConverterActivity extends AppCompatActivity implements AdapterView.
 
             if (isPDF(file)) {
                 try {
-                    return extractText.parsePdf(file);
+                    String text = extractText.parsePdf(file);
+
+                    this.fileName = extractText.getFileName();
+                    this.numberOfPages = String.valueOf(extractText.getNumberOfPages());
+                    this.ext = getExt(file);
+                    this.size = String.valueOf(extractText.getSize());
+
+                    return text;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             } else {
                 return extractText.extractTXT(file);
             }
@@ -111,13 +138,58 @@ public class ConverterActivity extends AppCompatActivity implements AdapterView.
         return "Não foi possível ler o texto";
     }
 
-    public boolean isPDF(File file) {
-        return file.getName() != null && file.getName().substring(file.getName().length() - 4, file.getName().length()).equals(".pdf");
+    private boolean isPDF(File file) {
+        return getExt(file).equals(".pdf");
     }
 
-    private void chanceActivity(String text) {
+    private String getExt(File file) {
+        if (file.getName() != null && !file.getName().isEmpty()) {
+            return file.getName().substring(file.getName().length() - 4, file.getName().length());
+        } else {
+            return new String();
+        }
+
+    }
+
+    private void chanceActivity(String filePath) {
         Intent editTextActivity = new Intent(ConverterActivity.this, EditTextActivity.class);
-        editTextActivity.putExtra("text", text);
+        editTextActivity.putExtra("file_path", filePath);
+        editTextActivity.putExtra("file_name", fileName);
+        editTextActivity.putExtra("number_pages", numberOfPages);
+        editTextActivity.putExtra("extension", ext);
+        editTextActivity.putExtra("size", size);
         startActivity(editTextActivity);
+    }
+
+    public File createDirectory() {
+        File path = Environment.getExternalStorageDirectory().getAbsoluteFile();
+        File dir = new File(path, "TCC_NAME" + File.separator + "MyAudioBooks");//TODO
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        return dir;
+    }
+
+    public String createFile(File path) {
+        try {
+            File fileExt = new File(path, fileName + ".txt");
+
+            //Cria o arquivo
+            fileExt.getParentFile().mkdirs();
+
+            //Abre o arquivo
+            FileOutputStream fosExt = new FileOutputStream(fileExt);
+
+            //Escreve no arquivo
+            fosExt.write(text[0].getBytes());
+
+            //Obrigatoriamente você precisa fechar
+            fosExt.close();
+
+            return fileExt.getPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

@@ -15,6 +15,9 @@ public class ExtractText {
 
     private String parsedText = null;
     private int page;
+    private String fileName;
+    private int numberOfPages;
+    private long size;
 
     public String extractTXT(File file) {
         try {
@@ -38,14 +41,28 @@ public class ExtractText {
         StringBuilder sb    = new StringBuilder();
         PdfReader reader    = new PdfReader(file.getPath());
 
+        fileName = file.getName();
+        numberOfPages = reader.getNumberOfPages();
+        size = file.length();
+
         for (page = 1; page <= reader.getNumberOfPages(); page++) {
             sb.append(PdfTextExtractor.getTextFromPage(reader, page));
-            Log.d("Pagina:", String.valueOf(page));
+            Log.d("Página: ", String.valueOf(page));
         }
 
         reader.close();
         return sb.toString();
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+    public int getNumberOfPages() {
+        return numberOfPages;
+    }
+
+    public long getSize() {
+        return size;
+    }
 }
 

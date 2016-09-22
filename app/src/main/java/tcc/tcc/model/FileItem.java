@@ -42,7 +42,7 @@ public class FileItem {
      */
     @Override
     public String toString() {
-        return name + " - " + "P\u00e1ginas: " + pages;
+        return name;
     }
 }
 
