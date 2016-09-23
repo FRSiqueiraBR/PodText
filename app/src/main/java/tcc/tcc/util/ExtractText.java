@@ -11,10 +11,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import tcc.tcc.task.TextFromPageTask;
+
 public class ExtractText {
 
     private String parsedText = null;
-    private int page;
     private String fileName;
     private int numberOfPages;
     private long size;
@@ -38,16 +39,17 @@ public class ExtractText {
     }
 
     public String parsePdf(File file) throws IOException {
-        StringBuilder sb    = new StringBuilder();
-        PdfReader reader    = new PdfReader(file.getPath());
+        final StringBuilder sb = new StringBuilder();
+        final PdfReader reader = new PdfReader(file.getPath());
 
         fileName = file.getName();
         numberOfPages = reader.getNumberOfPages();
         size = file.length();
 
+        int page;
         for (page = 1; page <= reader.getNumberOfPages(); page++) {
             sb.append(PdfTextExtractor.getTextFromPage(reader, page));
-            Log.d("Página: ", String.valueOf(page));
+            Log.d("Página", String.valueOf(page));
         }
 
         reader.close();
@@ -57,6 +59,7 @@ public class ExtractText {
     public String getFileName() {
         return fileName;
     }
+
     public int getNumberOfPages() {
         return numberOfPages;
     }

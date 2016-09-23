@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,10 +18,9 @@ public class ConverterTask extends AsyncTask<String, Float, ConverterTaskModel> 
     private ExtractText extractText = new ExtractText();
     private ConverterTaskModel converterTaskModel = new ConverterTaskModel();
 
-    public ConverterTask(Activity activity){
+    public ConverterTask(Activity activity) {
         this.activity = activity;
     }
-
 
     @Override
     protected ConverterTaskModel doInBackground(String... fileName) {
@@ -50,6 +48,10 @@ public class ConverterTask extends AsyncTask<String, Float, ConverterTaskModel> 
         activity.startActivity(editTextActivity);
     }
 
+    /**
+     * FAZ A LEITURA DO ARQUIVO,
+     * UTILIZA O ITEXT CASO O ARQUIVO SEJA UM PDF
+     */
     public String readFile(String[] name) {
         String fileName = name[0];
 
@@ -100,13 +102,9 @@ public class ConverterTask extends AsyncTask<String, Float, ConverterTaskModel> 
     public String createFile(File path, String text, String fileName) {
         try {
             File fileExt = new File(path, fileName + ".txt");
-            //Cria o arquivo
             fileExt.getParentFile().mkdirs();
-            //Abre o arquivo
             FileOutputStream fosExt = new FileOutputStream(fileExt);
-            //Escreve no arquivo
             fosExt.write(text.getBytes());
-            //Obrigatoriamente você precisa fechar
             fosExt.close();
 
             return fileExt.getPath();
