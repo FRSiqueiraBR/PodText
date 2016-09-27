@@ -27,7 +27,7 @@ public class EditTextActivity extends AppCompatActivity {
 
         Button btnConverterFile = (Button) findViewById(R.id.btn_converter);
         Button btnEditText = (Button) findViewById(R.id.btnEditText);
-        TextView fileName = (TextView) findViewById(R.id.txtViewFileName);
+        final TextView fileName = (TextView) findViewById(R.id.txtViewFileName);
         TextView numberPages = (TextView) findViewById(R.id.txtViewNumberPages);
         TextView size = (TextView) findViewById(R.id.txtViewSize);
         TextView extension = (TextView) findViewById(R.id.txtViewExtension);
@@ -48,6 +48,7 @@ public class EditTextActivity extends AppCompatActivity {
                 Intent speakActivity = new Intent(EditTextActivity.this, SpeakActivity.class);
                 speakActivity.putExtra("text", text);
                 speakActivity.putExtra("filePath", filePath);
+                speakActivity.putExtra("file_name", fileName.getText());
 
                 startActivity(speakActivity);
             }
