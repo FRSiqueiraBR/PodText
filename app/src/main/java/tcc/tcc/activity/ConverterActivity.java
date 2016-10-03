@@ -1,9 +1,7 @@
 package tcc.tcc.activity;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -47,7 +45,12 @@ public class ConverterActivity extends AppCompatActivity implements AdapterView.
         if (listFile.isEmpty()) {
             txtViewFileNotFound.setText("Nenhum Arquivo foi encontrado.");
         }
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        progress.cancel();
     }
 
     private List<FileItem> listFiles() {
@@ -84,6 +87,5 @@ public class ConverterActivity extends AppCompatActivity implements AdapterView.
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

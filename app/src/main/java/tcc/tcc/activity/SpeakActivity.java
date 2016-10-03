@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 
 import tcc.tcc.R;
+import tcc.tcc.thread.Synthesize;
 
 public class SpeakActivity extends AppCompatActivity {
     private TextToSpeech ts;
@@ -66,6 +67,8 @@ public class SpeakActivity extends AppCompatActivity {
                     Locale localeBR = new Locale("pt", "br");
                     ts.setLanguage(localeBR);
                     ts.setSpeechRate(Float.valueOf("0.85"));
+
+                    Log.d("Maximum Length", String.valueOf(ts.getMaxSpeechInputLength()));
                 }
             }
         });
@@ -90,6 +93,7 @@ public class SpeakActivity extends AppCompatActivity {
             //SpeakTask speak = new SpeakTask(getApplicationContext(), text);
             //speak.execute();
             ttsGreater2(text);
+            //synthesizeToFileByChunk(text);
         } else {
             ttsUnder20(text);
         }
@@ -129,13 +133,8 @@ public class SpeakActivity extends AppCompatActivity {
         List<String> listText = divideText(text);
 
         for (int i = 0; i < listText.size(); i++) {
-            //ts.speak(paragraph[i], TextToSpeech.QUEUE_FLUSH, null, utteranceId);
-            //File file = new File("/storage/emulated/0/TCC_NAME/MyAudioBooks/Teste.wav");
-            Log.i("adasd", listText.get(i).length() + "");
+            Log.i("Sintetizando", i + "de " + listText.size());
             ts.synthesizeToFile(listText.get(i), null, listFiles.get(i), utteranceId);
-            while (ts.isSpeaking()) {
-                //TODO buscar um jeito melhor de se fazer
-            }
         }
     }
 
@@ -170,21 +169,20 @@ public class SpeakActivity extends AppCompatActivity {
     public List<String> divideText(String text) {
         List<String> listString = new ArrayList<>();
 
-        if (text.length() > 3000) {
-            int parts = text.length() / 3000;
+        if (text.length() > 4000) {
+            int parts = text.length() / 4000;
 
             for (int i = 0; i <= parts; i++) {
-                Log.i("linha", i + "");
                 int length = text.length();
                 String part;
                 if (i == 0) {
-                    part = text.substring(0, 3000);
+                    part = text.substring(0, 4000);
                 } else if (i == 1) {
-                    part = text.substring(3000, 6000);
+                    part = text.substring(4000, 8000);
                 } else if (i == parts) {
-                    part = text.substring(3000 * i, length);
+                    part = text.substring(4000 * i, length);
                 } else {
-                    part = text.substring(3000 * i, 3000 * (i + 1));
+                    part = text.substring(4000 * i, 4000 * (i + 1));
                 }
                 listString.add(part);
                 File file = createDirectory();
@@ -196,7 +194,7 @@ public class SpeakActivity extends AppCompatActivity {
 
     public File createDirectory() {
         File path = Environment.getExternalStorageDirectory().getAbsoluteFile();
-        File dir = new File(path, "TCC_NAME" + File.separator + "MyAudioBooks");//TODO
+        File dir = new File(path, "TCC_NAME" + File.separator + "MyAudioBooks" + File.separator + fileName);//TODO
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -209,6 +207,34 @@ public class SpeakActivity extends AppCompatActivity {
         listFiles.add(fileExt);
 
         return fileExt;
+    }
+
+    public void synthesizeToFileByChunk(String text){
+        List<String> listChunk = divideText(text);
+
+        //for (int i = 0; i < listChunk.size(); i++) {
+        //    Synthesize synthesize = new Synthesize(getApplicationContext(), listChunk.get(i), listFiles.get(i));
+        //    Thread t = new Thread(synthesize);
+        //    t.start();
+        //}
+
+        Synthesize synthesize = new Synthesize(getApplicationContext(), listChunk.get(0), listFiles.get(0), ts);
+        Synthesize synthesize1 = new Synthesize(getApplicationContext(), listChunk.get(1), listFiles.get(1), ts);
+        Synthesize synthesize2 = new Synthesize(getApplicationContext(), listChunk.get(2), listFiles.get(2), ts);
+        Synthesize synthesize3 = new Synthesize(getApplicationContext(), listChunk.get(3), listFiles.get(3), ts);
+        Synthesize synthesize4 = new Synthesize(getApplicationContext(), listChunk.get(4), listFiles.get(4), ts);
+
+        Thread t = new Thread(synthesize);
+        Thread t1 = new Thread(synthesize1);
+        Thread t2 = new Thread(synthesize2);
+        Thread t3 = new Thread(synthesize3);
+        Thread t4 = new Thread(synthesize4);
+
+        t.start();
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
     }
 
 }
