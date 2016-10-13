@@ -14,6 +14,7 @@ import tcc.tcc.R;
 public class MainActivity extends AppCompatActivity {
     private Button btnConverter;
     private Button btnMockSpeak;
+    private Button btnMockMyAudios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnConverter = (Button) findViewById(R.id.btn_converter);
         btnMockSpeak = (Button) findViewById(R.id.button_mock);
+        btnMockMyAudios = (Button) findViewById(R.id.btnMockMeusAB);
 
         btnConverter.setOnClickListener(new View.OnClickListener() {
 
@@ -43,6 +45,14 @@ public class MainActivity extends AppCompatActivity {
                 converter.putExtra("filePath", "/storage/emulated/0/TCC_NAME/MyAudioBooks/java-ee-aproveite-toda-a-plataforma-para-construir-aplicacoes.pdf.txt");
                 converter.putExtra("file_name", "java-ee-aproveite-toda-a-plataforma-para-construir-aplicacoes.pdf");
                 startActivity(converter);
+            }
+        });
+
+        btnMockMyAudios.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }

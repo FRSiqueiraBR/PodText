@@ -21,6 +21,7 @@
         <activity android:name=".activity.ConverterActivity" />
         <activity android:name=".activity.EditTextActivity" />
         <activity android:name=".activity.SpeakActivity" />
+        <activity android:name=".activity.MyAudioBooksActivity"></activity>
     </application>
 
 </manifest>
