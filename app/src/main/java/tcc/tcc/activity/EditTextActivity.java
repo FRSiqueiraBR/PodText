@@ -25,6 +25,8 @@ public class EditTextActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_text);
 
+        getSupportActionBar().setTitle("Informações");
+
         Button btnConverterFile = (Button) findViewById(R.id.btn_converter);
         Button btnEditText = (Button) findViewById(R.id.btnEditText);
         final TextView fileName = (TextView) findViewById(R.id.txtViewFileName);

@@ -29,6 +29,8 @@ public class ConverterActivity extends AppCompatActivity implements AdapterView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_converter);
 
+        getSupportActionBar().setTitle("Selecione os Arquivos");
+
         List<FileItem> listFile = listFiles();
         TextView txtViewFileNotFound = (TextView) findViewById(R.id.files_not_found);
 
@@ -58,7 +60,7 @@ public class ConverterActivity extends AppCompatActivity implements AdapterView.
         File[] files = directory.listFiles();
         if (files != null) {
             for (File f : files) {
-                if (f.isFile()) {
+                if (f.isFile() && isPDF(f)) {
                     FileItem file = new FileItem();
                     file.setName(f.getName());
                     listFileItems.add(file);
@@ -87,5 +89,9 @@ public class ConverterActivity extends AppCompatActivity implements AdapterView.
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isPDF(File file) {
+        return file.getName() != null && file.getName().substring(file.getName().length() - 4, file.getName().length()).equals(".pdf");
     }
 }
