@@ -39,4 +39,9 @@ public class Folders {
     public void setListAudioBooks(List<AudioBook> listAudioBooks) {
         this.listAudioBooks = listAudioBooks;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

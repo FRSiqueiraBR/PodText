@@ -92,7 +92,7 @@ public class ConverterTask extends AsyncTask<String, Float, ConverterTaskModel> 
 
     public File createDirectory() {
         File path = Environment.getExternalStorageDirectory().getAbsoluteFile();
-        File dir = new File(path, "TCC_NAME" + File.separator + "MyAudioBooks");//TODO
+        File dir = new File(path, "Xenoma" + File.separator + "MyAudioBooks");//TODO
         if (!dir.exists()) {
             dir.mkdirs();
         }

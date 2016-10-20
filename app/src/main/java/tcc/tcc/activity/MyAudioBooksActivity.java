@@ -1,7 +1,12 @@
 package tcc.tcc.activity;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,9 +14,10 @@ import java.util.List;
 
 import tcc.tcc.R;
 import tcc.tcc.model.AudioBook;
-import tcc.tcc.model.FileItem;
 
-public class MyAudioBooksActivity extends AppCompatActivity {
+public class MyAudioBooksActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+    private String path;
+    private ListView listViewAudioBooks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,19 +26,22 @@ public class MyAudioBooksActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Meus Audiobooks");
 
-        //List<AudioBook> audioBookList = listAudioBooks();
+        listViewAudioBooks = (ListView) findViewById(R.id.list_view_audio_book);
+
+        Intent intent = getIntent();
+        path = intent.getStringExtra("path");
+
+        List<AudioBook> audioBookList = listAudioBooks();
+
+        ArrayAdapter<AudioBook> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, audioBookList);
+
+        listViewAudioBooks.setAdapter(adapter);
+        listViewAudioBooks.setOnItemClickListener(this);
     }
 
-    private List<AudioBook> listAudioBooks(){
-        File file = (File) listFiles();
-        return null;
-
-    }
-
-    private String findDirectory() {
-        File root = android.os.Environment.getExternalStorageDirectory();
-        File audioBooksDirectory = root;
-        return root.toString();
+    private List<AudioBook> listAudioBooks() {
+        return listFiles();
     }
 
     private List<AudioBook> listFiles() {
@@ -40,7 +49,7 @@ public class MyAudioBooksActivity extends AppCompatActivity {
         File[] files;
         List<AudioBook> audioBookList = new ArrayList<>();
 
-        directory = new File(findDirectory());
+        directory = new File(path);
         files = directory.listFiles();
 
         if (files != null) {
@@ -72,5 +81,8 @@ public class MyAudioBooksActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
 }

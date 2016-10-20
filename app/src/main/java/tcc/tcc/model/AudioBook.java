@@ -24,4 +24,9 @@ public class AudioBook {
     public void setPart(String part) {
         this.part = part;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

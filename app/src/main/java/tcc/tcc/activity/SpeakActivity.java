@@ -133,7 +133,7 @@ public class SpeakActivity extends AppCompatActivity {
         List<String> listText = divideText(text);
 
         for (int i = 0; i < listText.size(); i++) {
-            Log.i("Sintetizando", i + "de " + listText.size());
+            Log.i("Sintetizando", i + " de " + listText.size());
             ts.synthesizeToFile(listText.get(i), null, listFiles.get(i), utteranceId);
         }
     }
@@ -169,20 +169,20 @@ public class SpeakActivity extends AppCompatActivity {
     public List<String> divideText(String text) {
         List<String> listString = new ArrayList<>();
 
-        if (text.length() > 4000) {
-            int parts = text.length() / 4000;
+        if (text.length() > 3000) {
+            int parts = text.length() / 3000;
 
             for (int i = 0; i <= parts; i++) {
                 int length = text.length();
                 String part;
                 if (i == 0) {
-                    part = text.substring(0, 4000);
+                    part = text.substring(0, 3000);
                 } else if (i == 1) {
-                    part = text.substring(4000, 8000);
+                    part = text.substring(3000, 6000);
                 } else if (i == parts) {
-                    part = text.substring(4000 * i, length);
+                    part = text.substring(3000 * i, length);
                 } else {
-                    part = text.substring(4000 * i, 4000 * (i + 1));
+                    part = text.substring(3000 * i, 3000 * (i + 1));
                 }
                 listString.add(part);
                 File file = createDirectory();
@@ -194,7 +194,7 @@ public class SpeakActivity extends AppCompatActivity {
 
     public File createDirectory() {
         File path = Environment.getExternalStorageDirectory().getAbsoluteFile();
-        File dir = new File(path, "TCC_NAME" + File.separator + "MyAudioBooks" + File.separator + fileName);//TODO
+        File dir = new File(path, "Xenoma" + File.separator + "MyAudioBooks" + File.separator + fileName.substring(0, fileName.length() - 4));//TODO
         if (!dir.exists()) {
             dir.mkdirs();
         }
