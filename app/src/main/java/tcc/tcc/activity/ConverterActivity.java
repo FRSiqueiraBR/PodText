@@ -7,11 +7,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import tcc.tcc.R;
 import tcc.tcc.model.FileItem;
@@ -23,6 +26,8 @@ public class ConverterActivity extends AppCompatActivity implements AdapterView.
     private ProgressDialog progress;
 
     private ListView listViewFiles;
+
+    private List<Map<String, Object>> files;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,7 @@ public class ConverterActivity extends AppCompatActivity implements AdapterView.
                 if (f.isFile() && isPDF(f)) {
                     FileItem file = new FileItem();
                     file.setName(f.getName());
+                    file.setSize(String.valueOf(f.getUsableSpace() /1024) + " MB");
                     listFileItems.add(file);
                 }
             }
@@ -94,4 +100,5 @@ public class ConverterActivity extends AppCompatActivity implements AdapterView.
     public boolean isPDF(File file) {
         return file.getName() != null && file.getName().substring(file.getName().length() - 4, file.getName().length()).equals(".pdf");
     }
+
 }

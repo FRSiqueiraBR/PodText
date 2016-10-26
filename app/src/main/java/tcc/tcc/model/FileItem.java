@@ -1,5 +1,7 @@
 package tcc.tcc.model;
 
+import java.util.Date;
+
 /**
  * Created by felip on 14/09/2016.
  */
@@ -7,6 +9,7 @@ public class FileItem {
     private String name;
     private String size;
     private String pages;
+    private Date date;
 
     /**
      * GETTERS
@@ -43,6 +46,14 @@ public class FileItem {
     @Override
     public String toString() {
         return name;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
 

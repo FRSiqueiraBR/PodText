@@ -68,7 +68,7 @@ public class MyAudioBooksActivity extends AppCompatActivity implements AdapterVi
 
     private String getName(File file){
         if (file != null){
-            return file.getName().substring(0, file.getName().length() - 1);
+            return file.getName().substring(0, file.getName().length() - 4);
         }
         return new String();
     }
@@ -83,6 +83,5 @@ public class MyAudioBooksActivity extends AppCompatActivity implements AdapterVi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
     }
 }

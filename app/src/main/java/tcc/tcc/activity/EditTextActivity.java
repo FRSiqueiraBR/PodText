@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 import tcc.tcc.R;
+import tcc.tcc.service.SynthesizeToFileService;
 
 public class EditTextActivity extends AppCompatActivity {
     private String text;
@@ -47,13 +48,21 @@ public class EditTextActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 text = loadFile(filePath);
-                Intent speakActivity = new Intent(EditTextActivity.this, SpeakActivity.class);
+                /**Intent speakActivity = new Intent(EditTextActivity.this, SpeakActivity.class);
                 speakActivity.putExtra("text", text);
                 speakActivity.putExtra("filePath", filePath);
                 speakActivity.putExtra("file_name", fileName.getText());
 
                 startActivity(speakActivity);
+                */
+
+                SynthesizeToFileService synthesizeToFileService = new SynthesizeToFileService(getApplicationContext(), text, String.valueOf(fileName.getText()));
+
+                Intent mainIntent = new Intent(EditTextActivity.this, MainActivity.class);
+                startActivity(mainIntent);
+
             }
+
         });
 
         btnEditText.setOnClickListener(new View.OnClickListener() {
