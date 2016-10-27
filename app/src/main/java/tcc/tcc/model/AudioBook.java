@@ -8,6 +8,7 @@ public class AudioBook {
 
     private String name;
     private String part;
+    private String path;
 
     public String getName() {
         return name;
@@ -28,5 +29,13 @@ public class AudioBook {
     @Override
     public String toString() {
         return name;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

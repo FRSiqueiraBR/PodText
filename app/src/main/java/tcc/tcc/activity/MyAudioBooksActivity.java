@@ -1,8 +1,10 @@
 package tcc.tcc.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -58,6 +60,7 @@ public class MyAudioBooksActivity extends AppCompatActivity implements AdapterVi
                     AudioBook audioBook = new AudioBook();
                     audioBook.setName(getName(f));
                     audioBook.setPart(getPart(f));
+                    audioBook.setPath(getPath(f));
 
                     audioBookList.add(audioBook);
                 }
@@ -80,8 +83,27 @@ public class MyAudioBooksActivity extends AppCompatActivity implements AdapterVi
         return new String();
     }
 
+    private String getPath(File file){
+        if (file != null){
+            return file.getAbsolutePath();
+        }
+        return new String();
+    }
+
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        try {
+            AudioBook audioBook = (AudioBook) listViewAudioBooks.getItemAtPosition(position);
+
+            Intent myIntent = new Intent(android.content.Intent.ACTION_VIEW);
+            File file = new File(audioBook.getPath());
+            String extension = android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
+            String mimetype = android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+            myIntent.setDataAndType(Uri.fromFile(file), mimetype);
+            startActivity(myIntent);
+        } catch (Exception e) {
+            Log.e("Erro ao abrir arquivo", e.getMessage());
+        }
     }
 }
