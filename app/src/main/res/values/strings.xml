@@ -6,4 +6,7 @@
     <string name="progress">Progress</string>
     <string name="action_settings">Settings</string>
     <string name="informaces_do_livro">Informações do Livro:</string>
+    <string name="saiba_mais">Saiba mais</string>
+    <string name="meus_audio_livros">Meus Audio Livros</string>
+    <string name="ver">Ver</string>
 </resources>

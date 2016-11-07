@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 
 import java.io.File;
@@ -44,6 +45,22 @@ public class SynthesizeToFileService {
                     Locale localeBR = new Locale("pt", "br");
                     ts.setLanguage(localeBR);
                     ts.setSpeechRate(Float.valueOf("0.85"));
+                    ts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                        @Override
+                        public void onStart(String utteranceId) {
+                            Log.d("TTS: ", "Iniciado com sucesso");
+                        }
+
+                        @Override
+                        public void onDone(String utteranceId) {
+                            Log.d("TTS: ", "Concluído");
+                        }
+
+                        @Override
+                        public void onError(String utteranceId) {
+                            Log.d("TTS: ", "Ocorreu um erro");
+                        }
+                    });
                     synthesize();
                 }
             }
