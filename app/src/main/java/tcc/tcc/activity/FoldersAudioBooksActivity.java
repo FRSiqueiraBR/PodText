@@ -1,8 +1,14 @@
 package tcc.tcc.activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +25,7 @@ import tcc.tcc.model.Folders;
 public class FoldersAudioBooksActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private ListView listViewFolders;
+    private ArrayAdapter<Folders> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +39,7 @@ public class FoldersAudioBooksActivity extends AppCompatActivity implements Adap
 
         List<Folders> foldersList = listFolders();
 
-        ArrayAdapter<Folders> adapter = new ArrayAdapter<>(this,
+        adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, foldersList);
 
         listViewFolders.setAdapter(adapter);
@@ -41,8 +48,39 @@ public class FoldersAudioBooksActivity extends AppCompatActivity implements Adap
         if (foldersList.isEmpty()) {
             txtViewFileNotFound.setText("Desculpe, nenhum AudioBook encontrado :(");
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        listViewFolders.setAdapter(adapter);
+        listViewFolders.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu contextMenu, View view,
+                                            ContextMenu.ContextMenuInfo contextMenuInfo) {
+                contextMenu.add(Menu.NONE, 1, Menu.NONE, "deletar");
+            }
+        });
 
     }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo menuInfo =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int position = menuInfo.position;
+        switch (item.getItemId()) {
+            case 1:
+                deletar(position);
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    private void deletar(int position) {
+        //File file = new File("");
+        //file.delete();
+    }
+
 
     private List<Folders> listFolders() {
         File directory = new File(findDirectory());

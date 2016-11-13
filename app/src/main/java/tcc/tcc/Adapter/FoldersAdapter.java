@@ -1,4 +1,4 @@
-package tcc.tcc.adapter;
+package tcc.tcc.Adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

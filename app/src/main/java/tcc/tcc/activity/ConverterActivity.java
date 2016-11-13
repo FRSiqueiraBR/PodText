@@ -7,14 +7,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import tcc.tcc.R;
 import tcc.tcc.model.FileItem;
@@ -26,8 +23,6 @@ public class ConverterActivity extends AppCompatActivity implements AdapterView.
     private ProgressDialog progress;
 
     private ListView listViewFiles;
-
-    private List<Map<String, Object>> files;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -96,7 +96,7 @@ public class MyAudioBooksActivity extends AppCompatActivity implements AdapterVi
         try {
             AudioBook audioBook = (AudioBook) listViewAudioBooks.getItemAtPosition(position);
 
-            Intent myIntent = new Intent(android.content.Intent.ACTION_VIEW);
+            Intent myIntent = new Intent(Intent.ACTION_VIEW);
             File file = new File(audioBook.getPath());
             String extension = android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
             String mimetype = android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);

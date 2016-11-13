@@ -1,9 +1,11 @@
 package tcc.tcc.activity;
 
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -47,20 +49,7 @@ public class EditTextActivity extends AppCompatActivity {
         btnConverterFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                text = loadFile(filePath);
-                /**Intent speakActivity = new Intent(EditTextActivity.this, SpeakActivity.class);
-                speakActivity.putExtra("text", text);
-                speakActivity.putExtra("filePath", filePath);
-                speakActivity.putExtra("file_name", fileName.getText());
-
-                startActivity(speakActivity);
-                */
-
-                SynthesizeToFileService synthesizeToFileService = new SynthesizeToFileService(getApplicationContext(), text, String.valueOf(fileName.getText()));
-
-                Intent mainIntent = new Intent(EditTextActivity.this, MainActivity.class);
-                startActivity(mainIntent);
-
+                convertToAudio(String.valueOf(fileName.getText()));
             }
 
         });
@@ -94,5 +83,24 @@ public class EditTextActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public void convertToAudio(final String fileName){
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Aguarde...");
+        alertDialog.setMessage("Estamos trabalhando nos seus arquivos, você será avisado assim que concluirmos a conversão.");
+
+        alertDialog.setIcon(R.drawable.alert);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        text = loadFile(filePath);
+                        new SynthesizeToFileService(getApplicationContext(), text, fileName);
+
+                        Intent mainIntent = new Intent(EditTextActivity.this, MainActivity.class);
+                        startActivity(mainIntent);
+                    }
+                });
+        alertDialog.show();
     }
 }

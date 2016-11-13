@@ -10,6 +10,7 @@ public class Folders {
     private String path;
     private String name;
     private List<AudioBook> listAudioBooks;
+    private boolean read;
 
     /**
      * GETTERS
@@ -38,6 +39,14 @@ public class Folders {
 
     public void setListAudioBooks(List<AudioBook> listAudioBooks) {
         this.listAudioBooks = listAudioBooks;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 
     @Override

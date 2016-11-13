@@ -56,7 +56,7 @@ public class ConverterTask extends AsyncTask<String, Float, ConverterTaskModel> 
         String fileName = name[0];
 
         if (fileName != null && !fileName.isEmpty()) {
-            File file = new File(android.os.Environment.getExternalStorageDirectory(), fileName);
+            File file = new File(Environment.getExternalStorageDirectory(), fileName);
 
             if (isPDF(file)) {
                 try {
