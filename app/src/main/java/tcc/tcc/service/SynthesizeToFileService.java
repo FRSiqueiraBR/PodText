@@ -1,11 +1,18 @@
 package tcc.tcc.service;
 
 import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.app.TaskStackBuilder;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Environment;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import java.io.File;
@@ -13,6 +20,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import tcc.tcc.R;
+import tcc.tcc.activity.EditTextActivity;
+import tcc.tcc.activity.MainActivity;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
  * Created by FRSiqueira on 25/10/2016.
@@ -24,6 +37,7 @@ public class SynthesizeToFileService {
     private String fileName;
     private List<File> listFiles = new ArrayList<>();
     private Context applicationContext;
+    private int partCompleted;
 
     public SynthesizeToFileService(Context applicationContext, String text, String fileName) {
         this.applicationContext = applicationContext;
@@ -53,7 +67,9 @@ public class SynthesizeToFileService {
 
                         @Override
                         public void onDone(String utteranceId) {
-                            Log.d("TTS: ", "Concluído");
+                            Log.d("TTS: ", "Completado com sucesso");
+                            createNotification(partCompleted);
+                            partCompleted++;
                         }
 
                         @Override
@@ -180,6 +196,33 @@ public class SynthesizeToFileService {
     private String[] parseData(String data) {
         String regex = "[\\r\\n]+";
         return data.split(regex);
+    }
+
+    public void createNotification(final int partCompleted){
+        String notificationText = "A parte " + partCompleted + " do seu livro " + fileName + " já terminou.";
+
+        NotificationCompat.Builder mBuilder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(getApplicationContext())
+                        .setSmallIcon(R.drawable.alert)
+                        .setContentTitle("PodText")
+                        .setContentText(notificationText);
+        // Creates an explicit intent for an Activity in your app
+        Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
+
+        // The stack builder object will contain an artificial back stack for the
+        // started Activity.
+        // This ensures that navigating backward from the Activity leads out of
+        // your application to the Home screen.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+        // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(MainActivity.class);
+        // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager = (NotificationManager) applicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        // mId allows you to update the notification later on.
+        mNotificationManager.notify(123456, mBuilder.build());
     }
 
     public Context getApplicationContext() {
