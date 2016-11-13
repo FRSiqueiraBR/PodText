@@ -89,7 +89,7 @@ public class EditTextActivity extends AppCompatActivity {
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Aguarde...");
         alertDialog.setMessage("Estamos trabalhando nos seus arquivos, você será avisado assim que concluirmos a conversão.");
-
+        alertDialog.setCancelable(false);
         alertDialog.setIcon(R.drawable.alert);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {

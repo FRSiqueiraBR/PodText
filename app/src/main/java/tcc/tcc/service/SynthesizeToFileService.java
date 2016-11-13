@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 import tcc.tcc.R;
 import tcc.tcc.activity.EditTextActivity;
@@ -38,6 +39,8 @@ public class SynthesizeToFileService {
     private List<File> listFiles = new ArrayList<>();
     private Context applicationContext;
     private int partCompleted;
+    private List<String> listText = new ArrayList<>();
+    private int parts;
 
     public SynthesizeToFileService(Context applicationContext, String text, String fileName) {
         this.applicationContext = applicationContext;
@@ -69,7 +72,11 @@ public class SynthesizeToFileService {
                         public void onDone(String utteranceId) {
                             Log.d("TTS: ", "Completado com sucesso");
                             createNotification(partCompleted);
+
                             partCompleted++;
+                            if (partCompleted<=parts){
+                                convertoToFile(listText.get(partCompleted), listFiles.get(partCompleted));
+                            }
                         }
 
                         @Override
@@ -84,8 +91,12 @@ public class SynthesizeToFileService {
     }
 
     public void synthesize() {
+        this.listText = divideText(text);
+        this.parts = listText.size();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ttsGreater21(this.text);
+            //ttsGreater21(this.text);
+            convertoToFile(this.listText.get(0), listFiles.get(0));
         } else {
             ttsUnder20(this.text);
         }
@@ -128,6 +139,12 @@ public class SynthesizeToFileService {
 
             }
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void convertoToFile(String chunk, File file) {
+        String utteranceId = this.hashCode() + "";
+        ts.synthesizeToFile(chunk, null, file, utteranceId);
     }
 
     /**
