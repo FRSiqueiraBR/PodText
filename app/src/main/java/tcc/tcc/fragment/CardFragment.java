@@ -4,10 +4,12 @@ package tcc.tcc.fragment;
  * Created by FRSiqueira on 03/11/2016.
  */
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import tcc.tcc.R;
 import tcc.tcc.activity.ConverterActivity;
 import tcc.tcc.activity.FoldersAudioBooksActivity;
+import tcc.tcc.activity.MyFoldersAudioBooksActivity;
 import tcc.tcc.model.MenuItem;
 
 
@@ -29,7 +32,7 @@ public class CardFragment extends Fragment {
     ArrayList<MenuItem> listItens = new ArrayList<>();
     RecyclerView MyRecyclerView;
     String name[] = {"MEUS AUDIO LIVROS", "CONVERTER MEUS LIVROS", "SOBRE NÓS", "FALE CONOSCO"};
-    int images[] = {R.drawable.audiolivro, R.drawable.livro_e_fone};
+    int images[] = {R.drawable.books, R.drawable.livro_e_fone, R.drawable.books_2, R.drawable.doug };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,6 +116,47 @@ public class CardFragment extends Fragment {
                     }
                 }
             });
+
+            option1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                    if (titleTextView.getText().equals("MEUS AUDIO LIVROS")){
+                        alertDialog.setTitle(titleTextView.getText());
+                        alertDialog.setMessage("Aqui você tem uma lista de todos os seus Audio Livros convertidos e dividos por partes e você pode reproduzi-las.");
+                    }
+
+                    if (titleTextView.getText().equals("CONVERTER MEUS LIVROS")){
+                        alertDialog.setTitle(titleTextView.getText());
+                        alertDialog.setMessage("Aqui você tem uma lista dos seus PDF's que poderá converter para um Audio Livro.");
+                    }
+
+                    alertDialog.setIcon(R.drawable.alert);
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+            });
+
+            option2.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    if (titleTextView.getText().equals("MEUS AUDIO LIVROS")){
+                        Intent myAudioBooks = new Intent(getActivity(), MyFoldersAudioBooksActivity.class);
+                        startActivity(myAudioBooks);
+                    }
+
+                    if (titleTextView.getText().equals("CONVERTER MEUS LIVROS")){
+                        Intent converter = new Intent(getActivity(), ConverterActivity.class);
+                        startActivity(converter);
+                    }
+                }
+            });
         }
     }
 
@@ -121,7 +165,7 @@ public class CardFragment extends Fragment {
 
         MenuItem item = new MenuItem();
         item.setName(name[0]);
-        item.setImageResourceId(images[0]);
+        item.setImageResourceId(images[2]);
         item.setOption1("Ver");
         item.setOption2("Saiba Mais");
         listItens.add(item);
@@ -135,7 +179,7 @@ public class CardFragment extends Fragment {
 
         MenuItem item3 = new MenuItem();
         item3.setName(name[2]);
-        item3.setImageResourceId(images[0]);
+        item3.setImageResourceId(images[3]);
         item3.setOption1("Ver");
         item3.setOption2("Saiba Mais");
         listItens.add(item3);
@@ -146,7 +190,6 @@ public class CardFragment extends Fragment {
         item4.setOption1("Ver");
         item4.setOption2("Saiba Mais");
         listItens.add(item4);
-
 
     }
 }
