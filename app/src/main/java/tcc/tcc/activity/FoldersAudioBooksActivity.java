@@ -26,6 +26,7 @@ public class FoldersAudioBooksActivity extends AppCompatActivity implements Adap
 
     private ListView listViewFolders;
     private ArrayAdapter<Folders> adapter;
+    List<Folders> foldersList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class FoldersAudioBooksActivity extends AppCompatActivity implements Adap
         TextView txtViewFileNotFound = (TextView) findViewById(R.id.files_not_found);
         listViewFolders = (ListView) findViewById(R.id.folder_list);
 
-        List<Folders> foldersList = listFolders();
+        this.foldersList = listFolders();
 
         adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, foldersList);
@@ -77,8 +78,18 @@ public class FoldersAudioBooksActivity extends AppCompatActivity implements Adap
     }
 
     private void deletar(int position) {
-        //File file = new File("");
-        //file.delete();
+        Folders folder = foldersList.get(position);
+        File dir = new File(folder.getPath());
+        if (dir.isDirectory())
+        {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++)
+            {
+                new File(dir, children[i]).delete();
+            }
+            dir.delete();
+        }
+        this.foldersList = listFolders();
     }
 
 
