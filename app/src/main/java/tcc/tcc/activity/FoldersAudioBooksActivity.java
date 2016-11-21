@@ -111,7 +111,7 @@ public class FoldersAudioBooksActivity extends AppCompatActivity implements Adap
     }
 
     private String findDirectory() {
-        File root = new File(android.os.Environment.getExternalStorageDirectory() + File.separator +  "Xenoma" + File.separator + "MyAudioBooks");
+        File root = new File(android.os.Environment.getExternalStorageDirectory() + File.separator +  "PodText" + File.separator + "MyAudioBooks");
         return root.toString();
     }
 

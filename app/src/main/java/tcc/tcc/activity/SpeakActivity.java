@@ -194,7 +194,7 @@ public class SpeakActivity extends AppCompatActivity {
 
     public File createDirectory() {
         File path = Environment.getExternalStorageDirectory().getAbsoluteFile();
-        File dir = new File(path, "Xenoma" + File.separator + "MyAudioBooks" + File.separator + fileName.substring(0, fileName.length() - 4));//TODO
+        File dir = new File(path, "PodText" + File.separator + "MyAudioBooks" + File.separator + fileName.substring(0, fileName.length() - 4));//TODO
         if (!dir.exists()) {
             dir.mkdirs();
         }

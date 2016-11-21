@@ -187,7 +187,7 @@ public class SynthesizeToFileService {
 
     public File createDirectory() {
         File path = Environment.getExternalStorageDirectory().getAbsoluteFile();
-        File dir = new File(path, "Xenoma" + File.separator + "MyAudioBooks" + File.separator + fileName.substring(0, fileName.length() - 4));
+        File dir = new File(path, "PodText" + File.separator + "MyAudioBooks" + File.separator + fileName.substring(0, fileName.length() - 4));
         if (!dir.exists()) {
             dir.mkdirs();
         }

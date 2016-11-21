@@ -6,9 +6,11 @@ package tcc.tcc.fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,7 +34,7 @@ public class CardFragment extends Fragment {
     ArrayList<MenuItem> listItens = new ArrayList<>();
     RecyclerView MyRecyclerView;
     String name[] = {"MEUS AUDIO LIVROS", "CONVERTER MEUS LIVROS", "SOBRE NÓS", "FALE CONOSCO"};
-    int images[] = {R.drawable.books, R.drawable.livro_e_fone, R.drawable.books_2, R.drawable.doug };
+    int images[] = {R.drawable.books, R.drawable.livro_e_fone, R.drawable.books_2, R.drawable.doug, R.drawable.ilustra_contato, R.drawable.fundo_sobre};
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,6 +107,7 @@ public class CardFragment extends Fragment {
             coverImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
                     if (titleTextView.getText().equals("MEUS AUDIO LIVROS")){
                         Intent myAudioBooks = new Intent(getActivity(), FoldersAudioBooksActivity.class);
                         startActivity(myAudioBooks);
@@ -113,6 +116,35 @@ public class CardFragment extends Fragment {
                     if (titleTextView.getText().equals("CONVERTER MEUS LIVROS")){
                         Intent converter = new Intent(getActivity(), ConverterActivity.class);
                         startActivity(converter);
+                    }
+
+                    if (titleTextView.getText().equals("SOBRE NÓS")){
+                        alertDialog.setTitle(titleTextView.getText());
+                        alertDialog.setMessage("Somos 3 estudantes de ciências da computação que por meio desse aplicativo procuramos trazer facilidade e inovação ao ato de ler.\n" +
+                                "Adeptos da leitura em transporte público, foi fácil procurar inspiração para esse projeto.");
+                        alertDialog.setIcon(R.drawable.alert);
+                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+                    }
+
+                    if (titleTextView.getText().equals("FALE CONOSCO")){
+                        alertDialog.setTitle(titleTextView.getText());
+                        alertDialog.setMessage("Para dúvidas e sugestões, mande um email para : podtextcontato@gmail.com");
+                        alertDialog.setIcon(R.drawable.alert);
+                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Enviar Email",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                                        emailIntent.setData(Uri.parse("mailto: podtextcontato@gmail.com"));
+                                        startActivity(Intent.createChooser(emailIntent, "Send feedback"));
+                                    }
+                                });
+                        alertDialog.show();
                     }
                 }
             });
@@ -131,6 +163,28 @@ public class CardFragment extends Fragment {
                         alertDialog.setMessage("Aqui você tem uma lista dos seus PDF's que poderá converter para um Audio Livro.");
                     }
 
+                    if (titleTextView.getText().equals("SOBRE NÓS")){
+                        alertDialog.setTitle(titleTextView.getText());
+                        alertDialog.setMessage("Somos 3 estudantes de ciências da computação que por meio desse aplicativo procuramos trazer facilidade e inovação ao ato de ler.\n" +
+                                "Adeptos da leitura em transporte público, foi fácil procurar inspiração para esse projeto.");
+                    }
+
+                    if (titleTextView.getText().equals("FALE CONOSCO")){
+                        alertDialog.setTitle(titleTextView.getText());
+                        alertDialog.setMessage("Para dúvidas e sugestões, mande um email para : podtextcontato@gmail.com");
+                        alertDialog.setIcon(R.drawable.alert);
+                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Enviar Email",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                                        emailIntent.setData(Uri.parse("mailto: podtextcontato@gmail.com"));
+                                        startActivity(Intent.createChooser(emailIntent, "Send feedback"));
+                                    }
+                                });
+                        alertDialog.show();
+                        return;
+                    }
+
                     alertDialog.setIcon(R.drawable.alert);
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                             new DialogInterface.OnClickListener() {
@@ -146,6 +200,7 @@ public class CardFragment extends Fragment {
 
                 @Override
                 public void onClick(View v) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
                     if (titleTextView.getText().equals("MEUS AUDIO LIVROS")){
                         Intent myAudioBooks = new Intent(getActivity(), MyFoldersAudioBooksActivity.class);
                         startActivity(myAudioBooks);
@@ -154,6 +209,21 @@ public class CardFragment extends Fragment {
                     if (titleTextView.getText().equals("CONVERTER MEUS LIVROS")){
                         Intent converter = new Intent(getActivity(), ConverterActivity.class);
                         startActivity(converter);
+                    }
+
+                    if (titleTextView.getText().equals("FALE CONOSCO")){
+                        alertDialog.setTitle(titleTextView.getText());
+                        alertDialog.setMessage("Para dúvidas e sugestões, mande um email para : podtextcontato@gmail.com");
+                        alertDialog.setIcon(R.drawable.alert);
+                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Enviar Email",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                                        emailIntent.setData(Uri.parse("mailto: podtextcontato@gmail.com"));
+                                        startActivity(Intent.createChooser(emailIntent, "Send feedback"));
+                                    }
+                                });
+                        alertDialog.show();
                     }
                 }
             });
@@ -179,14 +249,14 @@ public class CardFragment extends Fragment {
 
         MenuItem item3 = new MenuItem();
         item3.setName(name[2]);
-        item3.setImageResourceId(images[3]);
+        item3.setImageResourceId(images[5]);
         item3.setOption1("Ver");
         item3.setOption2("Saiba Mais");
         listItens.add(item3);
 
         MenuItem item4 = new MenuItem();
         item4.setName(name[3]);
-        item4.setImageResourceId(images[0]);
+        item4.setImageResourceId(images[4]);
         item4.setOption1("Ver");
         item4.setOption2("Saiba Mais");
         listItens.add(item4);
