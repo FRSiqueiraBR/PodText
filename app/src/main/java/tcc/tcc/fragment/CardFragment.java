@@ -34,7 +34,7 @@ public class CardFragment extends Fragment {
     ArrayList<MenuItem> listItens = new ArrayList<>();
     RecyclerView MyRecyclerView;
     String name[] = {"MEUS AUDIO LIVROS", "CONVERTER MEUS LIVROS", "SOBRE NÓS", "FALE CONOSCO"};
-    int images[] = {R.drawable.books, R.drawable.livro_e_fone, R.drawable.books_2, R.drawable.doug, R.drawable.ilustra_contato, R.drawable.fundo_sobre};
+    int images[] = {R.drawable.books, R.drawable.livro_e_fone, R.drawable.books_2, R.drawable.doug, R.drawable.ilustra_contato, R.drawable.sobre_nos};
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,6 +84,8 @@ public class CardFragment extends Fragment {
         public void onBindViewHolder(final MyViewHolder holder, int position) {
             holder.titleTextView.setText(list.get(position).getName());
             holder.coverImageView.setImageResource(list.get(position).getImageResourceId());
+            holder.option1.setText(list.get(position).getOption1());
+            holder.option2.setText(list.get(position).getOption2());
         }
         @Override
         public int getItemCount() {
@@ -202,7 +204,7 @@ public class CardFragment extends Fragment {
                 public void onClick(View v) {
                     AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
                     if (titleTextView.getText().equals("MEUS AUDIO LIVROS")){
-                        Intent myAudioBooks = new Intent(getActivity(), MyFoldersAudioBooksActivity.class);
+                        Intent myAudioBooks = new Intent(getActivity(), FoldersAudioBooksActivity.class);
                         startActivity(myAudioBooks);
                     }
 
@@ -236,29 +238,29 @@ public class CardFragment extends Fragment {
         MenuItem item = new MenuItem();
         item.setName(name[0]);
         item.setImageResourceId(images[2]);
-        item.setOption1("Ver");
-        item.setOption2("Saiba Mais");
+        item.setOption1("Saiba Mais");
+        item.setOption2("Ver");
         listItens.add(item);
 
         MenuItem item2 = new MenuItem();
         item2.setName(name[1]);
         item2.setImageResourceId(images[1]);
-        item2.setOption1("Ver");
-        item2.setOption2("Saiba Mais");
+        item2.setOption1("Saiba Mais");
+        item2.setOption2("Ver");
         listItens.add(item2);
 
         MenuItem item3 = new MenuItem();
         item3.setName(name[2]);
         item3.setImageResourceId(images[5]);
-        item3.setOption1("Ver");
-        item3.setOption2("Saiba Mais");
+        item3.setOption1("Saiba Mais");
+        item3.setOption2("");
         listItens.add(item3);
 
         MenuItem item4 = new MenuItem();
         item4.setName(name[3]);
         item4.setImageResourceId(images[4]);
-        item4.setOption1("Ver");
-        item4.setOption2("Saiba Mais");
+        item4.setOption1("Saiba Mais");
+        item4.setOption2("");
         listItens.add(item4);
 
     }
