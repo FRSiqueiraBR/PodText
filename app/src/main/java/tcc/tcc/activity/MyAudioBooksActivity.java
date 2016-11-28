@@ -26,12 +26,16 @@ public class MyAudioBooksActivity extends AppCompatActivity implements AdapterVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_audio_books);
 
-        getSupportActionBar().setTitle("Meus Audiobooks");
+        Intent intent = getIntent();
+        path = intent.getStringExtra("path");
+        String folderName = intent.getStringExtra("folderPath");
+
+
+        getSupportActionBar().setTitle(folderName);
 
         listViewAudioBooks = (ListView) findViewById(R.id.list_view_audio_book);
 
-        Intent intent = getIntent();
-        path = intent.getStringExtra("path");
+
 
         List<AudioBook> audioBookList = listAudioBooks();
 

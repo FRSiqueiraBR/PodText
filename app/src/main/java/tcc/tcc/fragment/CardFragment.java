@@ -34,7 +34,7 @@ public class CardFragment extends Fragment {
     ArrayList<MenuItem> listItens = new ArrayList<>();
     RecyclerView MyRecyclerView;
     String name[] = {"MEUS AUDIO LIVROS", "CONVERTER MEUS LIVROS", "SOBRE NÓS", "FALE CONOSCO"};
-    int images[] = {R.drawable.books, R.drawable.livro_e_fone, R.drawable.books_2, R.drawable.doug, R.drawable.ilustra_contato, R.drawable.sobre_nos};
+    int images[] = {R.drawable.books, R.drawable.livro_e_fone, R.drawable.books_2, R.drawable.doug, R.drawable.entreemcontato, R.drawable.sobre_nos};
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

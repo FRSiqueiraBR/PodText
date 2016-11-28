@@ -165,7 +165,7 @@ public class SynthesizeToFileService {
         if (text.length() > 3000) {
             int parts = text.length() / 3000;
 
-            for (int i = 0; i <= parts; i++) {
+            for (int i = 1; i <= parts; i++) {
                 int length = text.length();
                 String part;
                 if (i == 0) {

@@ -122,6 +122,7 @@ public class FoldersAudioBooksActivity extends AppCompatActivity implements Adap
         Intent myAudioBooksActivity = new Intent(this, MyAudioBooksActivity.class);
 
         myAudioBooksActivity.putExtra("path" , folder.getPath());
+        myAudioBooksActivity.putExtra("folderPath", folder.getName());
         this.startActivity(myAudioBooksActivity);
     }
 
