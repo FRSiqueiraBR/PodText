@@ -89,7 +89,9 @@ public class FoldersAudioBooksActivity extends AppCompatActivity implements Adap
             }
             dir.delete();
         }
-        this.foldersList = listFolders();
+        finish();
+        startActivity(getIntent());
+        //this.foldersList = listFolders();
     }
 
 

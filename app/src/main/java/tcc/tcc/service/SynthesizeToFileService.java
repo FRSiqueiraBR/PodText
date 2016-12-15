@@ -77,7 +77,7 @@ public class SynthesizeToFileService {
                             if (partCompleted<=parts){
                                 convertoToFile(listText.get(partCompleted), listFiles.get(partCompleted));
                             }
-                        }
+                            }
 
                         @Override
                         public void onError(String utteranceId) {
@@ -165,7 +165,7 @@ public class SynthesizeToFileService {
         if (text.length() > 3000) {
             int parts = text.length() / 3000;
 
-            for (int i = 1; i <= parts; i++) {
+            for (int i = 0; i <= parts; i++) {
                 int length = text.length();
                 String part;
                 if (i == 0) {
@@ -195,7 +195,7 @@ public class SynthesizeToFileService {
     }
 
     public File createFile(File path, String fileName, int part) {
-        File fileExt = new File(path, fileName.substring(0, fileName.length() - 4) + "(" + part + ")" + ".wav");
+        File fileExt = new File(path, fileName.substring(0, fileName.length() - 4) + "(" + (part+1) + ")" + ".wav");
         fileExt.getParentFile().mkdirs();
         listFiles.add(fileExt);
 
@@ -216,7 +216,7 @@ public class SynthesizeToFileService {
     }
 
     public void createNotification(final int partCompleted){
-        String notificationText = "A parte " + partCompleted + " do seu livro " + fileName + " já terminou.";
+        String notificationText = "A parte " + (partCompleted+1) + " do seu livro " + fileName + " já terminou.";
 
         NotificationCompat.Builder mBuilder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(getApplicationContext())
